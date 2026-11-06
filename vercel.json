@@ -1,0 +1,25 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/dunning",
+      "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/cron/expiring",
+      "schedule": "0 14 * * *"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.declinekit.com"
+        }
+      ],
+      "destination": "https://declinekit.com/:path*",
+      "permanent": true
+    }
+  ]
+}

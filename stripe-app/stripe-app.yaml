@@ -1,0 +1,48 @@
+$schema: https://stripe.com/stripe-app/v2.0.0/schema
+id: com.declinekit.recovery
+name: DeclineKit
+version: 0.1.3
+icon: icons/icon.png
+declarations:
+    distribution_type: public
+    stripe_api_access:
+        permissions:
+            - permission: invoice_write
+              purpose: Find subscription invoices whose payment failed, and retry that one invoice after your customer adds a new card. DeclineKit never creates new invoices or charges.
+            - permission: customer_write
+              purpose: Read the name and email of a customer whose payment failed so we can email them, and save the new card they add as their default.
+            - permission: subscription_write
+              purpose: Point the subscription at the customer's new card so future renewals use it.
+            - permission: checkout_session_write
+              purpose: Create the Stripe-hosted page where your customer enters their new card. DeclineKit never sees card numbers.
+            - permission: setup_intent_read
+              purpose: Confirm the new card was saved before we retry the invoice.
+            - permission: payment_method_read
+              purpose: Read the expiry month of the card on a subscription, so we can remind the customer before it expires.
+            - permission: connected_account_read
+              purpose: Read your business name to sign recovery emails as you.
+            - permission: event_read
+              purpose: Get notified within seconds when a subscription payment fails, is paid, or is voided.
+    stripe_api_access_type: platform
+    sandbox_install_compatible: true
+    post_install_action:
+        type: settings
+    constants:
+        API_BASE: https://declinekit.com
+    allowed_redirect_uris:
+        - https://declinekit.com/api/stripe-app/installed
+ui_extension:
+    views:
+        - viewport: settings
+          component: AppSettings
+        - viewport: stripe.dashboard.home.overview
+          component: HomeOverview
+        - viewport: stripe.dashboard.customer.detail
+          component: CustomerDetail
+        - viewport: stripe.dashboard.invoice.detail
+          component: InvoiceDetail
+    content_security_policy:
+        connect-src:
+            - https://declinekit.com/api/stripe-app/
+        purpose: DeclineKit's Dashboard views load your recovery status from declinekit.com.
+extensions: []

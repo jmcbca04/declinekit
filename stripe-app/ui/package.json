@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "@stripe/ui-extension-sdk": "^9.2.0",
+    "stripe": "^22.3.0"
+  },
+  "description": "DeclineKit",
+  "devDependencies": {
+    "@stripe/ui-extension-tools": "^0.1.0",
+    "@types/jest": "^29.5.14",
+    "@types/react": "^18.3.1",
+    "eslint": "^9.39.4",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.4.11",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "license": "~~proprietary~~",
+  "name": "com.declinekit.recovery-ui",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext ts,tsx src",
+    "test": "jest --passWithNoTests"
+  },
+  "version": "0.0.1"
+}

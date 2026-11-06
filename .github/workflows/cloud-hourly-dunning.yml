@@ -1,0 +1,16 @@
+# DeclineKit Cloud only: runs the recovery-email job hourly on declinekit.com.
+# vercel.json schedules it daily so the repo deploys on Vercel's free plan; self-hosters who
+# want hourly runs can point any scheduler at /api/cron/dunning (see SELF_HOSTING.md).
+# Forks skip this workflow.
+name: Hourly recovery emails (Cloud)
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+jobs:
+  dunning:
+    if: github.repository == 'jmcbca04/declinekit'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: curl -fsS --max-time 280 -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" https://declinekit.com/api/cron/dunning
