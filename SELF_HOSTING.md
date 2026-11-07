@@ -26,12 +26,14 @@ The quickest way, with nothing to run yourself.
 3. **Redeploy** (Deployments → ⋯ → Redeploy). The build creates the tables.
 4. Continue with [Connect Stripe](#connect-stripe).
 
-**Scheduled jobs on Vercel.** `vercel.json` runs the recovery-email job and the card-expiry check once a day, which works on Vercel's free Hobby plan. Hourly runs send the first recovery email sooner after a failure. For hourly runs, either upgrade to Pro and change the `/api/cron/dunning` schedule in `vercel.json` to `0 * * * *`, or point a free external scheduler (cron-job.org, GitHub Actions, or anything that can send an HTTP request) at:
+**Vercel's free Hobby plan.** `vercel.json` runs the recovery-email job hourly, and Hobby only allows daily scheduled jobs, so the first deploy on Hobby fails with "Hobby accounts are limited to daily cron jobs". Fix it in your copy of the repository: in `vercel.json`, change the `/api/cron/dunning` schedule from `0 * * * *` to `0 13 * * *`, commit, and Vercel redeploys. Recovery emails then go out once a day. For hourly runs on Hobby, also point a free external scheduler (cron-job.org, or anything that can send an HTTP request) at:
 
 ```
 GET https://<your-app>/api/cron/dunning
 Authorization: Bearer <CRON_SECRET>
 ```
+
+Vercel Pro runs the hourly schedule as is.
 
 ## 2. Railway or Render
 
