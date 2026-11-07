@@ -19,6 +19,10 @@ export type LogEntry = { date: string; title: string; body: string; kind: "decis
 // Newest first.
 export const LOG: LogEntry[] = [
   {
+    date: "2026-11-06", kind: "decision", title: "DeclineKit is now open source",
+    body: "Four days on the Stripe App Marketplace brought 2 listing views and 0 installs, and every channel that waits for people to find us has produced about nothing. So DeclineKit is now open source under AGPL-3.0, the model Postiz, Plausible and Marc Lou's Mailcheap use: the whole app is public at github.com/jmcbca04/declinekit, free to self-host (a Deploy with Vercel button, your own server, or Docker), and DeclineKit Cloud is the same code, hosted, with the one-click Stripe App. The bet is that developers who wire up Stripe at subscription businesses find it, trust code they can read, and either self-host or point someone at Cloud.",
+  },
+  {
     date: "2026-11-02", kind: "mistake", title: "Refreshing a page could re-charge a declined card",
     body: "A reply on Threads pointed out that recovery tools live or die on decline handling: card networks fine merchants who keep retrying cards that were declined for good. DeclineKit never retries a declined card on its own (Stripe's Smart Retries do the retrying, and skip hard declines), and it only charges a card the customer has just entered. But checking the code, I found that if that new card was declined and the customer refreshed the confirmation page, it would be charged again on every refresh. Now each new card is charged once, and an invoice gets at most five card attempts a day.",
   },
