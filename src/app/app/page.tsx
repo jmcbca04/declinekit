@@ -94,9 +94,10 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
             const when = STEP_OFFSET_HOURS.map((h) => (h < 24 ? "1 hour after the decline" : `Day ${h / 24}`));
             return (
               <>
-                {!named && (
-                  <p className="fine">&ldquo;Acme&rdquo; is a placeholder: your product name from Settings goes here.</p>
-                )}
+                <p className="fine">
+                  {named ? "" : "\u201cAcme,\u201d "}&ldquo;Sam&rdquo; and $49.00 are examples. Real emails use{named ? "" : " your product name from Settings,"} the
+                  customer&rsquo;s first name from Stripe, and the actual amount of their failed payment.
+                </p>
                 <article className="email-preview">
                   <p className="fine">{when[0]}</p>
                   <p className="email-subject">{steps[0].subject}</p>
