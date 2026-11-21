@@ -86,22 +86,27 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
             Settings, and switched recovery on.
           </p>
           {(() => {
-            const brand = account.brand_name ?? account.from_name ?? "Your product";
+            const named = account.brand_name ?? account.from_name;
+            const brand = named ?? "Acme";
             const steps = [0, 1, 2, 3].map((step) =>
               dunningCopy({ step, brand, customerName: "Sam", amountCents: 4900, currency: "usd", link: "https://declinekit.com/u/example" }),
             );
             const when = STEP_OFFSET_HOURS.map((h) => (h < 24 ? "1 hour after the decline" : `Day ${h / 24}`));
             return (
               <>
+                {!named && (
+                  <p className="fine">&ldquo;Acme&rdquo; is a placeholder: your product name from Settings goes here.</p>
+                )}
                 <article className="email-preview">
+                  <p className="fine">{when[0]}</p>
                   <p className="email-subject">{steps[0].subject}</p>
                   <pre>{steps[0].body}</pre>
                 </article>
                 <details>
-                  <summary>See all four emails</summary>
-                  {steps.map((e, i) => (
+                  <summary>See the other three emails</summary>
+                  {steps.slice(1).map((e, i) => (
                     <article key={i} className="email-preview">
-                      <p className="fine">{when[i]}</p>
+                      <p className="fine">{when[i + 1]}</p>
                       <p className="email-subject">{e.subject}</p>
                       <pre>{e.body}</pre>
                     </article>
