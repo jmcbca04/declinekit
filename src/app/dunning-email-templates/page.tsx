@@ -111,7 +111,7 @@ export default function DunningTemplates() {
           <p>
             DeclineKit sends this exact sequence in your product&rsquo;s name whenever a Stripe subscription payment
             fails, links customers to a card update page, and retries the charge the moment they save a new card.
-            It stops automatically when the invoice is paid. Free until it recovers your first $100, then from $29/month.
+            It stops automatically when the invoice is paid. Free until it recovers your first $100 (or for 60 days), then from $29/month.
           </p>
           <div className="cta-row">
             <Link href="/login" className="btn btn-primary">Start free</Link>

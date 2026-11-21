@@ -49,7 +49,7 @@ const FAQ = [
   ["Is it safe to connect DeclineKit to Stripe?", "DeclineKit is a Stripe App reviewed and approved by Stripe. It asks for only the permissions listed above, and Stripe shows them to you before you install. DeclineKit can’t refund, transfer, or change payouts. Uninstall it in Stripe and access ends immediately. Prefer a restricted API key instead? That works too, and we encrypt it with AES-256."],
   ["Who do the emails come from?", "Your product name and sender name, with replies going to whatever address you choose. Emails are plain text so they read like a note from you, not a marketing blast."],
   ["Will you email customers before I’m ready?", "No. Emails stay off until you’ve previewed them and switched recovery on."],
-  ["What does it cost?", "Nothing until DeclineKit has recovered your first $100, or for 60 days, whichever comes first. Then $29, $79 or $149 a month depending on your MRR. If you don’t pick a plan, recovery emails pause. Nothing is ever charged automatically, and no card is needed to start."],
+  ["What does it cost?", "Nothing until DeclineKit has recovered your first $100, or for 60 days from when you connect Stripe, whichever comes first. Then $29, $79 or $149 a month depending on your MRR. If you don’t pick a plan, recovery emails pause. Nothing is ever charged automatically, and no card is needed to start."],
   ["What counts as recovered?", "Only payments your customers make through DeclineKit’s card-update link. Invoices that Stripe’s own retries collect don’t count toward your $100."],
 ];
 
@@ -72,7 +72,7 @@ export default function Home() {
               <Link href="/audit" className="btn btn-lg">See what failed cards cost you</Link>
             </div>
             <p className="fine">
-              Free until we recover your first $100. No card required.{" "}
+              Free until we recover your first $100 or for 60 days. No card required.{" "}
               <a href="https://marketplace.stripe.com/apps/declinekit">Now on the Stripe App Marketplace &rarr;</a>
             </p>
           </div>
@@ -160,7 +160,7 @@ export default function Home() {
 
         <section className="pricing" id="pricing">
           <h2>One recovered customer usually pays for the month</h2>
-          <p className="lede">Free until we recover your first $100, or for 60 days. Then flat pricing by your MRR, with no cut of what we recover. Every plan includes everything.</p>
+          <p className="lede">Free until we recover your first $100 or for 60 days. Then flat pricing by your MRR, with no cut of what we recover. Every plan includes everything.</p>
           <div className="plans">
             {(Object.keys(PLANS) as PlanId[]).map((id) => (
               <div key={id} className={id === "growth" ? "plan plan-featured" : "plan"}>

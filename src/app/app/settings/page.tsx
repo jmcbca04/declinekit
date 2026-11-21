@@ -1,4 +1,5 @@
 import { requireAccount } from "@/lib/auth";
+import { freePeriodEnd, hasPlan } from "@/lib/auth";
 import { CLOUD } from "@/lib/config";
 import { isConnected } from "@/lib/stripe";
 import { PLANS, type PlanId } from "@/lib/plans";
@@ -7,7 +8,8 @@ import { deleteAccountAction, disconnectAction, openPortal, saveSettings, subscr
 export default async function Settings({ searchParams }: { searchParams: Promise<{ saved?: string; error?: string }> }) {
   const account = await requireAccount();
   const { saved, error } = await searchParams;
-  const subscribed = account.subscription_status === "active" || account.subscription_status === "past_due";
+  const subscribed = hasPlan(account);
+  const freeUntil = CLOUD && !subscribed ? await freePeriodEnd(account) : null;
   return (
     <>
       <section>
@@ -44,6 +46,12 @@ export default async function Settings({ searchParams }: { searchParams: Promise
                 <button className={id === "growth" ? "btn btn-primary" : "btn"} data-fast-goal="checkout_started" data-fast-goal-plan={id}>Choose {PLANS[id].name}</button>
               </form>
             ))}
+            {freeUntil && (
+              <p className="fine">
+                You won&rsquo;t be charged until {freeUntil.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })},
+                when your free period ends, or sooner if DeclineKit recovers your first $100 before then.
+              </p>
+            )}
           </div>
         )}
       </section>

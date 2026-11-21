@@ -1,4 +1,5 @@
 import { sql } from "./db";
+import { hasPlan } from "./auth";
 import type { Account } from "./auth";
 
 // Daily ceiling on customer emails per account. Trials are free and unverified, so they
@@ -8,7 +9,7 @@ const TRIAL_CAP = 50;
 const PAID_CAP = 1000;
 
 export async function remainingSends(account: Account) {
-  const cap = account.subscription_status === "active" || account.subscription_status === "past_due" ? PAID_CAP : TRIAL_CAP;
+  const cap = hasPlan(account) ? PAID_CAP : TRIAL_CAP;
   const [r] = await sql`
     SELECT (SELECT count(*) FROM email_log l JOIN failed_invoices f ON f.id = l.failed_invoice_id
              WHERE f.account_id = ${account.id} AND l.sent_at > now() - interval '24 hours')

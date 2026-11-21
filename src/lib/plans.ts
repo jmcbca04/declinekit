@@ -9,5 +9,5 @@ export type PlanId = keyof typeof PLANS;
 // or for this many days after signup, whichever comes first.
 export const FREE_RECOVERY_CENTS = 100_00;
 export const FREE_DAYS = 60;
-export const FREE_OFFER = "Free until we recover your first $100";
+export const FREE_OFFER = "Free until we recover your first $100 or for 60 days";
 export const FREE_OFFER_LONG = "Free until we recover your first $100 or for 60 days, whichever comes first. No card needed.";

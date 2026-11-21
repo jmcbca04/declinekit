@@ -52,7 +52,7 @@ export default function ForGhost() {
           <h2>See how many paid members you lost last quarter</h2>
           <p>
             The free audit reads the last 90 days of invoices in your Stripe account with a read-only key and totals
-            every renewal that failed and never got paid. Then try DeclineKit free until it recovers your first $100, no card required.
+            every renewal that failed and never got paid. Then try DeclineKit free until it recovers your first $100 (or for 60 days), no card required.
           </p>
           <div className="cta-row">
             <Link href="/audit" className="btn btn-primary">Run the free audit</Link>

@@ -80,7 +80,7 @@ export default function SmartRetriesVsDunning() {
           <h2>Steps 3, 4 and 5, done for you</h2>
           <p>
             DeclineKit works alongside Smart Retries. It emails customers in your name when a payment fails, warns them
-            before a card expires, and retries the charge the moment they add a new card. Free until it recovers your first $100, then from $29/month.
+            before a card expires, and retries the charge the moment they add a new card. Free until it recovers your first $100 (or for 60 days), then from $29/month.
           </p>
           <div className="cta-row">
             <Link href="/audit" className="btn btn-primary">See what failed payments cost you</Link>

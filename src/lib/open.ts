@@ -19,6 +19,10 @@ export type LogEntry = { date: string; title: string; body: string; kind: "decis
 // Newest first.
 export const LOG: LogEntry[] = [
   {
+    date: "2026-11-21", kind: "mistake", title: "A stranger found a billing bug, plus three rough edges",
+    body: "A reader who saw DeclineKit on r/selfhosted tried it and emailed four precise notes, all correct. The serious one: choosing a plan during the free period charged the full month immediately, so an eager customer would have paid for weeks we promised were free. Now a plan chosen early starts billing when the free period ends (or when DeclineKit recovers the first $100, if that comes first), and the plan picker says so. Also fixed: the 60-day clock now starts when you connect Stripe, not at signup; every page says '$100 or 60 days'; the connect screen previews all four emails before you hand over access; and the README warns that the Deploy button needs one line changed on Vercel's free plan. Nobody had paid yet, so nobody was overcharged.",
+  },
+  {
     date: "2026-11-06", kind: "decision", title: "DeclineKit is now open source",
     body: "Four days on the Stripe App Marketplace brought 2 listing views and 0 installs, and every channel that waits for people to find us has produced about nothing. So DeclineKit is now open source under AGPL-3.0, the model Postiz, Plausible and Marc Lou's Mailcheap use: the whole app is public at github.com/jmcbca04/declinekit, free to self-host (a Deploy with Vercel button, your own server, or Docker), and DeclineKit Cloud is the same code, hosted, with the one-click Stripe App. The bet is that developers who wire up Stripe at subscription businesses find it, trust code they can read, and either self-host or point someone at Cloud.",
   },

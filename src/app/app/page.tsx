@@ -78,6 +78,39 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
             {keyForm}
           </>
         )}
+
+        <div className="onboarding-preview">
+          <h2>What your customers will get</h2>
+          <p className="fine">
+            Preview: connect Stripe to go live. Nothing is sent until you&rsquo;ve connected, checked your sender name in
+            Settings, and switched recovery on.
+          </p>
+          {(() => {
+            const brand = account.brand_name ?? account.from_name ?? "Your product";
+            const steps = [0, 1, 2, 3].map((step) =>
+              dunningCopy({ step, brand, customerName: "Sam", amountCents: 4900, currency: "usd", link: "https://declinekit.com/u/example" }),
+            );
+            const when = STEP_OFFSET_HOURS.map((h) => (h < 24 ? "1 hour after the decline" : `Day ${h / 24}`));
+            return (
+              <>
+                <article className="email-preview">
+                  <p className="email-subject">{steps[0].subject}</p>
+                  <pre>{steps[0].body}</pre>
+                </article>
+                <details>
+                  <summary>See all four emails</summary>
+                  {steps.map((e, i) => (
+                    <article key={i} className="email-preview">
+                      <p className="fine">{when[i]}</p>
+                      <p className="email-subject">{e.subject}</p>
+                      <pre>{e.body}</pre>
+                    </article>
+                  ))}
+                </details>
+              </>
+            );
+          })()}
+        </div>
       </section>
     );
   }

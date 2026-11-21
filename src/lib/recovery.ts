@@ -5,6 +5,7 @@ import { appUrl } from "./format";
 import { clientFor, customerIdOf, subscriptionIdOf } from "./stripe";
 import { STEP_OFFSET_HOURS, sendInternal } from "./email";
 import type { Account } from "./auth";
+import { FREE_DAYS } from "./plans";
 
 export const WEBHOOK_EVENTS: Stripe.WebhookEndpointCreateParams.EnabledEvent[] = [
   "invoice.payment_failed",
@@ -121,7 +122,10 @@ export async function connectStripe(account: Account, rawKey: string) {
     throw new ConnectError("That key can't create webhooks. Give it write access to Webhook Endpoints.");
   }
 
-  await sql`UPDATE accounts SET stripe_connection = 'key', stripe_key_enc = ${encrypt(key)}, webhook_endpoint_id = ${endpoint.id},
+  await sql`UPDATE accounts SET stripe_connection = 'key', trial_ends_at = CASE WHEN subscription_status = 'trialing' AND billing_subscription_id IS NULL
+                THEN GREATEST(trial_ends_at, LEAST(now(), created_at + interval '30 days') + make_interval(days => ${FREE_DAYS}))
+                ELSE trial_ends_at END,
+              stripe_key_enc = ${encrypt(key)}, webhook_endpoint_id = ${endpoint.id},
               webhook_secret_enc = ${encrypt(endpoint.secret!)}, stripe_account_id = ${accountId},
               stripe_account_name = ${accountName},
               brand_name = COALESCE(brand_name, ${accountName}),
@@ -133,6 +137,8 @@ export async function connectStripe(account: Account, rawKey: string) {
   await importOpenFailures(account.id, stripe);
 }
 
+// The 60-day free period runs from when Stripe is first connected (capped so it can't start
+// more than 30 days after signup, and reconnecting never shortens it).
 // Links a DeclineKit account to a Stripe account that installed the app, picks up the
 // business name for the emails, and imports invoices that are failing right now.
 export async function linkAppInstall(account: Account, stripeAccountId: string) {
@@ -152,7 +158,10 @@ export async function linkAppInstall(account: Account, stripeAccountId: string) 
     }
   }
   const linked = { ...account, stripe_connection: "app" as const, stripe_account_id: stripeAccountId, stripe_livemode: livemode };
-  await sql`UPDATE accounts SET stripe_connection = 'app', stripe_account_id = ${stripeAccountId}, app_installed_at = now(),
+  await sql`UPDATE accounts SET stripe_connection = 'app', trial_ends_at = CASE WHEN subscription_status = 'trialing' AND billing_subscription_id IS NULL
+                THEN GREATEST(trial_ends_at, LEAST(now(), created_at + interval '30 days') + make_interval(days => ${FREE_DAYS}))
+                ELSE trial_ends_at END,
+              stripe_account_id = ${stripeAccountId}, app_installed_at = now(),
               stripe_livemode = ${livemode}, stripe_key_enc = NULL, webhook_endpoint_id = NULL, webhook_secret_enc = NULL,
               stripe_account_name = COALESCE(${name}, stripe_account_name),
               brand_name = COALESCE(brand_name, ${name}), from_name = COALESCE(from_name, ${name})

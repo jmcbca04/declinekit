@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
   title: "DeclineKit: recover failed Stripe payments automatically",
   description:
-    "When a subscription card is declined, DeclineKit emails your customer a link to update it and retries the charge. Install it from the Stripe App Marketplace in one click. Free until it recovers your first $100.",
+    "When a subscription card is declined, DeclineKit emails your customer a link to update it and retries the charge. Install it from the Stripe App Marketplace in one click. Free until it recovers your first $100 (or for 60 days).",
   openGraph: { siteName: "DeclineKit", type: "website" },
 };
 

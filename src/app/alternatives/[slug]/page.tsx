@@ -24,7 +24,7 @@ export default async function AlternativePage({ params }: { params: Promise<{ sl
     ["Price", a.pricing, "$29, $79 or $149/month by MRR. Flat, no cut of recoveries"],
     ["Focus", a.focus, "Failed and expiring cards on Stripe, nothing else"],
     ["Emails", "Configurable campaigns and templates", "Up to four plain-text notes over 12 days in your name, replies to your inbox"],
-    ["Free to start", "See their site", "Free until we recover your first $100 (or 60 days), no card"],
+    ["Free to start", "See their site", "Free until we recover your first $100 or for 60 days, no card"],
   ];
   return (
     <>
@@ -88,7 +88,7 @@ export default async function AlternativePage({ params }: { params: Promise<{ sl
         </p>
 
         <aside className="callout">
-          <h2>Try DeclineKit free until it recovers your first $100</h2>
+          <h2>Try DeclineKit free until it recovers your first $100 (or for 60 days)</h2>
           <p>No card required. You only pay once it has paid for itself.</p>
           <div className="cta-row">
             <Link href="/audit" className="btn btn-primary">See what failed payments cost you</Link>

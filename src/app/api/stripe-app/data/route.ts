@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 import { platform } from "@/lib/stripe";
 import { appUrl, money } from "@/lib/format";
-import { isActive, recoveredCents, type Account } from "@/lib/auth";
+import { hasPlan, isActive, recoveredCents, type Account } from "@/lib/auth";
 import { FREE_RECOVERY_CENTS, PLANS, type PlanId } from "@/lib/plans";
 import { mintLinkToken } from "@/lib/stripe-app";
 
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
   }
 
   const recovered = await recoveredCents(account.id);
-  const paid = account.subscription_status === "active" || account.subscription_status === "past_due";
+  const paid = hasPlan(account);
   const daysLeft = Math.max(0, Math.ceil((new Date(account.trial_ends_at).getTime() - Date.now()) / 86400_000));
   const free_status = paid
     ? undefined

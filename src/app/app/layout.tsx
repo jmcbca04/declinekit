@@ -3,9 +3,10 @@ import { CLOUD } from "@/lib/config";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { PENDING_LINK_COOKIE } from "@/lib/stripe-app";
-import { requireAccount, isActive, recoveredCents } from "@/lib/auth";
+import { requireAccount, isActive, onFreePeriod, recoveredCents } from "@/lib/auth";
 import { FREE_RECOVERY_CENTS } from "@/lib/plans";
 import { money } from "@/lib/format";
+import { isConnected } from "@/lib/stripe";
 import { logout } from "./actions";
 import { TrackGoalOnce } from "./track-goal";
 
@@ -17,7 +18,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   // Signed in after starting "Finish setup" from the Stripe Dashboard: complete the link.
   if ((await cookies()).get(PENDING_LINK_COOKIE)) redirect("/api/stripe-app/link");
   const daysLeft = Math.ceil((new Date(account.trial_ends_at).getTime() - Date.now()) / 86400_000);
-  const recovered = account.subscription_status === "trialing" ? await recoveredCents(account.id) : 0;
+  const recovered = onFreePeriod(account) ? await recoveredCents(account.id) : 0;
   const free = isActive(account, recovered);
   return (
     <div className="app">
@@ -33,9 +34,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       {CLOUD && account.stripe_livemode === false && (
         <div className="banner">Connected to a Stripe sandbox. Everything works and it&apos;s always free; test recoveries don&apos;t count toward your free $100.</div>
       )}
-      {CLOUD && account.subscription_status === "trialing" && account.stripe_livemode !== false && (
+      {CLOUD && onFreePeriod(account) && account.stripe_livemode !== false && (
         <div className={free ? "banner" : "banner banner-warn"}>
-          {free
+          {free && !isConnected(account)
+            ? "Free until we recover your first $100, or for 60 days from when you connect Stripe."
+            : free
             ? `Free until we recover $100 for you: ${money(recovered)} so far, ${daysLeft} day${daysLeft === 1 ? "" : "s"} left.`
             : recovered >= FREE_RECOVERY_CENTS
               ? `DeclineKit has recovered ${money(recovered)} for you. Pick a plan to keep recovering.`

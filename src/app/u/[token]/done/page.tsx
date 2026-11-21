@@ -4,7 +4,8 @@ import { clientFor, subscriptionIdOf } from "@/lib/stripe";
 import { markRecovered } from "@/lib/recovery";
 import { money } from "@/lib/format";
 import { sendFreeLimitReached, sendInternal } from "@/lib/email";
-import { recoveredCents } from "@/lib/auth";
+import { platform } from "@/lib/stripe";
+import { onFreePeriod, recoveredCents } from "@/lib/auth";
 import { FREE_RECOVERY_CENTS } from "@/lib/plans";
 import { load } from "../shared";
 import { overLimit } from "@/lib/rate-limit";
@@ -47,11 +48,17 @@ export default async function Done({ params, searchParams }: {
       outcome = "declined";
     }
     // Crossing the free allowance with this recovery: tell the account owner once.
+    // Crossing the free $100 with this recovery ends the free period: tell an account without a plan
+    // once, and start billing an account that chose a plan early (Stripe has been holding it in a trial).
     if (outcome === "paid" && account.subscription_status === "trialing") {
       try {
         const total = await recoveredCents(account.id);
         if (total >= FREE_RECOVERY_CENTS && total - f.amount_cents < FREE_RECOVERY_CENTS) {
-          await sendFreeLimitReached(account.email, money(total, f.currency));
+          if (onFreePeriod(account)) {
+            await sendFreeLimitReached(account.email, money(total, f.currency));
+          } else if (account.billing_subscription_id) {
+            await platform().subscriptions.update(account.billing_subscription_id, { trial_end: "now" });
+          }
         }
       } catch (e) {
         console.error("free limit check failed", e);

@@ -48,7 +48,7 @@ export default function ForBeehiiv() {
           <h2>See how many paid subscribers you lost last quarter</h2>
           <p>
             The free audit reads the last 90 days of invoices with a read-only key and totals every renewal that failed
-            and never got paid. Then try DeclineKit free until it recovers your first $100, no card required.
+            and never got paid. Then try DeclineKit free until it recovers your first $100 (or for 60 days), no card required.
           </p>
           <div className="cta-row">
             <Link href="/audit" className="btn btn-primary">Run the free audit</Link>

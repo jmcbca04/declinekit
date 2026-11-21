@@ -310,3 +310,9 @@ main.prose > section.template { padding: 0; max-width: none; margin: 0; }
 }
 .key-fallback { margin-top: 2rem; }
 .key-fallback summary { cursor: pointer; color: var(--action); font-weight: 600; }
+
+/* Email preview on the connect screen */
+.onboarding-preview { margin-top: 2.5rem; }
+.onboarding-preview .email-preview { margin-top: 1rem; }
+.onboarding-preview details { margin-top: 1rem; }
+.onboarding-preview summary { cursor: pointer; font-weight: 600; }

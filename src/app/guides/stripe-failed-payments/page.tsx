@@ -127,7 +127,7 @@ export default function StripeFailedPayments() {
           <p>
             When a Stripe renewal fails, DeclineKit emails your customer in your business&rsquo;s name with a link to a
             Stripe-hosted card form, retries the invoice the moment they add a new card, and warns customers before a card
-            expires. It works alongside Smart Retries. Free until it recovers your first $100, then from $29/month.
+            expires. It works alongside Smart Retries. Free until it recovers your first $100 (or for 60 days), then from $29/month.
           </p>
           <div className="cta-row">
             <Link href="/audit" className="btn btn-primary">See what failed payments cost you</Link>

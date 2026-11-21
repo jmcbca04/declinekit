@@ -24,7 +24,7 @@ Stripe's Smart Retries recover *temporary* declines (insufficient funds, a bank 
 
 | | Self-hosted | [DeclineKit Cloud](https://declinekit.com) |
 |---|---|---|
-| Price | Free (AGPL-3.0) | Free until it recovers your first $100, then from $29/month |
+| Price | Free (AGPL-3.0) | Free until it recovers your first $100 (or for 60 days), then from $29/month |
 | Connect Stripe | Restricted API key | One click from the [Stripe App Marketplace](https://marketplace.stripe.com/apps/declinekit), or a restricted key |
 | Recovery status inside the Stripe Dashboard | No | Yes |
 | Email sending | Your SMTP provider | Managed |
@@ -36,6 +36,8 @@ Stripe's Smart Retries recover *temporary* declines (insufficient funds, a bank 
 The quickest way: deploy your own copy to Vercel with a free Neon Postgres database. No server to run.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjmcbca04%2Fdeclinekit&project-name=declinekit&repository-name=declinekit&env=APP_URL%2CENCRYPTION_KEY%2CCRON_SECRET%2CSMTP_URL%2CMAIL_DOMAIN&envDescription=Your+install%27s+URL%2C+an+encryption+key%2C+a+cron+secret%2C+and+your+SMTP+server.+See+SELF_HOSTING.md.&envLink=https%3A%2F%2Fgithub.com%2Fjmcbca04%2Fdeclinekit%2Fblob%2Fmain%2FSELF_HOSTING.md%231-deploy-to-vercel)
+
+> **On Vercel's free Hobby plan?** Its scheduled jobs can run at most once a day, so the first deploy fails with "Hobby accounts are limited to daily cron jobs". In your copy of the repo, change the `/api/cron/dunning` schedule in `vercel.json` from `0 * * * *` to `0 13 * * *` and redeploy. [Details](SELF_HOSTING.md#1-deploy-to-vercel).
 
 1. Click **Deploy**, then fill in `APP_URL`, `ENCRYPTION_KEY`, `CRON_SECRET`, `SMTP_URL` and `MAIL_DOMAIN`.
 2. In your new Vercel project, open **Storage**, add a **Neon** Postgres database, and redeploy. The tables are created automatically.

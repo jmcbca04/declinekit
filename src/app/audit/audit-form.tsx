@@ -36,7 +36,7 @@ export function AuditForm() {
               &ldquo;Likely recoverable&rdquo; assumes 40% of failed payments come back once customers are asked to update
               their card, the low end of what dunning tools report.
             </p>
-            <Link href="/login" className="btn btn-primary btn-lg">Start recovering it: free until your first $100</Link>
+            <Link href="/login" className="btn btn-primary btn-lg">Start recovering it: free until your first $100 or 60 days</Link>
           </>
         )}
       </div>

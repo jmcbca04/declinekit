@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { sql } from "@/lib/db";
-import { requireAccount } from "@/lib/auth";
+import { freePeriodEnd, requireAccount } from "@/lib/auth";
 import { signOut } from "@/lib/session";
 import { ConnectError, connectStripe, disconnectStripe } from "@/lib/recovery";
 import { platform, PLANS, type PlanId } from "@/lib/stripe";
@@ -87,6 +87,10 @@ export async function subscribe(formData: FormData) {
     const v = jar.get(k)?.value;
     if (v) datafast[k] = v;
   }
+  // Choosing a plan during the free period doesn't end it: Stripe holds the subscription in a
+  // trial until the free period would have ended (Stripe needs at least 48 hours of trial).
+  // If recoveries reach the free $100 first, billing starts then (see /u/[token]/done).
+  const freeUntil = await freePeriodEnd(account);
   const session = await platform().checkout.sessions.create({
     mode: "subscription",
     line_items: [{ price, quantity: 1 }],
@@ -94,7 +98,11 @@ export async function subscribe(formData: FormData) {
     ...(account.billing_customer_id ? { customer: account.billing_customer_id } : { customer_email: account.email }),
     allow_promotion_codes: true,
     metadata: datafast,
-    subscription_data: { billing_mode: { type: "flexible" }, metadata: datafast },
+    subscription_data: {
+      billing_mode: { type: "flexible" },
+      metadata: datafast,
+      ...(freeUntil ? { trial_end: Math.floor(freeUntil.getTime() / 1000) } : {}),
+    },
     success_url: `${appUrl()}/app?subscribed=1`,
     cancel_url: `${appUrl()}/app/settings`,
   });

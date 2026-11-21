@@ -83,9 +83,26 @@ export async function recoveredCents(accountId: string) {
 // Dunning emails go out on a paid plan, or while the free allowance lasts: until we've
 // recovered FREE_RECOVERY_CENTS for the account or FREE_DAYS have passed.
 // Sandbox installs (our tests, Stripe's app reviewers) are always on: no real money moves.
-export function isActive(a: Pick<Account, "subscription_status" | "trial_ends_at" | "stripe_livemode">, recovered: number) {
+// Two different things share Stripe's word "trialing": DeclineKit's own free period (no Stripe
+// subscription yet), and a paid plan chosen during the free period, which Stripe holds in a trial
+// until the free period ends. A billing_subscription_id tells them apart.
+type Billing = Pick<Account, "subscription_status" | "billing_subscription_id">;
+export const hasPlan = (a: Billing) =>
+  !!a.billing_subscription_id && ["trialing", "active", "past_due"].includes(a.subscription_status);
+export const onFreePeriod = (a: Billing) => a.subscription_status === "trialing" && !a.billing_subscription_id;
+
+// When a plan chosen now would start billing: the end of the free period, if it's still running
+// (and at least 48 hours away, Stripe's minimum trial), otherwise null for "bill today".
+export async function freePeriodEnd(a: Account): Promise<Date | null> {
+  if (!onFreePeriod(a)) return null;
+  const end = new Date(a.trial_ends_at);
+  if (end.getTime() < Date.now() + 48 * 3600_000) return null;
+  return (await recoveredCents(a.id)) < FREE_RECOVERY_CENTS ? end : null;
+}
+
+export function isActive(a: Pick<Account, "subscription_status" | "trial_ends_at" | "stripe_livemode" | "billing_subscription_id">, recovered: number) {
   if (!CLOUD) return true; // self-hosted: no plans, no limits
   if (a.stripe_livemode === false) return true;
-  if (a.subscription_status === "active" || a.subscription_status === "past_due") return true;
-  return a.subscription_status === "trialing" && new Date(a.trial_ends_at) > new Date() && recovered < FREE_RECOVERY_CENTS;
+  if (hasPlan(a)) return true;
+  return onFreePeriod(a) && new Date(a.trial_ends_at) > new Date() && recovered < FREE_RECOVERY_CENTS;
 }

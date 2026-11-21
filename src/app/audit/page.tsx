@@ -21,7 +21,7 @@ export default function Audit() {
           </p>
           <p className="audit-nokey">
             No key handy? <Link href="/failed-payment-calculator" data-fast-goal="audit_to_calculator">Estimate it from your MRR in 10 seconds</Link>,
-            or <Link href="/login" data-fast-goal="audit_to_trial">start free</Link> (free until we recover your first $100) and connect Stripe later.
+            or <Link href="/login" data-fast-goal="audit_to_trial">start free</Link> (free until we recover your first $100 or for 60 days) and connect Stripe later.
           </p>
           <ol className="steps">
             <li>

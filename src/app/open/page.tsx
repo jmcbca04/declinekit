@@ -24,7 +24,7 @@ async function stats() {
   const [s] = await sql`
     SELECT
       (SELECT count(*) FROM accounts WHERE stripe_livemode AND email NOT LIKE '%@stripe.com') AS signups,
-      (SELECT count(*) FROM accounts WHERE stripe_livemode AND email NOT LIKE '%@stripe.com' AND subscription_status = 'trialing' AND trial_ends_at > now()) AS trials,
+      (SELECT count(*) FROM accounts WHERE stripe_livemode AND email NOT LIKE '%@stripe.com' AND subscription_status = 'trialing' AND billing_subscription_id IS NULL AND trial_ends_at > now()) AS trials,
       (SELECT count(*) FROM accounts WHERE (stripe_key_enc IS NOT NULL OR stripe_connection = 'app') AND stripe_livemode AND email NOT LIKE '%@stripe.com') AS connected,
       (SELECT count(*) FROM audits) AS audits,
       (SELECT COALESCE(SUM(f.amount_cents), 0) FROM failed_invoices f JOIN accounts a ON a.id = f.account_id
@@ -121,7 +121,7 @@ export default async function Open() {
             <Link href="/audit" className="btn">See what failed payments cost you</Link>
             <Link href="/" className="btn">How it works</Link>
           </div>
-          <p className="fine">Free until we recover your first $100. No card needed.</p>
+          <p className="fine">Free until we recover your first $100 or for 60 days. No card needed.</p>
         </aside>
       </main>
       <SiteFooter />
