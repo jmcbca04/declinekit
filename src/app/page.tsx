@@ -75,6 +75,10 @@ export default function Home() {
               Free until we recover your first $100 or for 60 days. No card required.{" "}
               <a href="https://marketplace.stripe.com/apps/declinekit">Now on the Stripe App Marketplace &rarr;</a>
             </p>
+            <p className="fine">
+              Open source under AGPL-3.0.{" "}
+              <a href="https://github.com/jmcbca04/declinekit">Read the code or self-host it on GitHub &rarr;</a>
+            </p>
           </div>
           <figure className="receipt" aria-label="Example: how one failed invoice gets recovered">
             <figcaption>
