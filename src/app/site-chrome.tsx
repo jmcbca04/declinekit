@@ -9,6 +9,7 @@ export function SiteHeader() {
         <Link href="/open">Open stats</Link>
         <Link href="/decline-codes">Decline codes</Link>
         <Link href="/#pricing">Pricing</Link>
+        <a href="https://github.com/jmcbca04/declinekit">GitHub</a>
         <Link href="/login">Sign in</Link>
       </nav>
     </header>
@@ -35,6 +36,7 @@ export function SiteFooter() {
         <Link href="/#pricing">Pricing</Link>
         <Link href="/privacy">Privacy</Link>
         <Link href="/terms">Terms</Link>
+        <a href="https://github.com/jmcbca04/declinekit">GitHub</a>
         <a href="https://www.quickping.dev/to/declinekit">Support</a>
       </nav>
     </footer>

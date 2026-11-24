@@ -62,6 +62,7 @@ export default function Home() {
       <main>
         <section className="hero">
           <div className="hero-copy">
+            <p className="eyebrow">Open-source failed-payment recovery for Stripe</p>
             <h1>Get paid for the subscriptions your customers meant to keep.</h1>
             <p className="lede">
               When a card is declined, DeclineKit emails your customer a link to update it and retries the charge
@@ -76,7 +77,7 @@ export default function Home() {
               <a href="https://marketplace.stripe.com/apps/declinekit">Now on the Stripe App Marketplace &rarr;</a>
             </p>
             <p className="fine">
-              Open source under AGPL-3.0.{" "}
+              AGPL-3.0 licensed.{" "}
               <a href="https://github.com/jmcbca04/declinekit">Read the code or self-host it on GitHub &rarr;</a>
             </p>
           </div>
@@ -159,6 +160,10 @@ export default function Home() {
             Stripe&rsquo;s permissions aren&rsquo;t fine-grained enough to say &ldquo;only update the default card&rdquo;, so
             Write access to Customers technically allows editing other customer fields. DeclineKit&rsquo;s code only does the
             actions above. The free audit uses a separate key with read-only access to Invoices, and never stores it.
+          </p>
+          <p>
+            Don&rsquo;t take our word for it: every line of code that touches your Stripe account is public.{" "}
+            <a href="https://github.com/jmcbca04/declinekit">Read it on GitHub &rarr;</a>
           </p>
         </section>
 
